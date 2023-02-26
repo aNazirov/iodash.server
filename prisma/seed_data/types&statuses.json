@@ -1,0 +1,32 @@
+[
+  {
+    "title": "paymentType",
+    "data": [
+      {
+        "id": 1,
+        "title": "Click"
+      },
+      {
+        "id": 2,
+        "title": "PayMe"
+      }
+    ]
+  },
+  {
+    "title": "paymentStatusType",
+    "data": [
+      {
+        "id": 1,
+        "title": "В ожидании"
+      },
+      {
+        "id": 2,
+        "title": "Успешно"
+      },
+      {
+        "id": 3,
+        "title": "Не успешно"
+      }
+    ]
+  }
+]

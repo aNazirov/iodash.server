@@ -1,0 +1,40 @@
+version: '3.3'
+
+services:
+  core:
+    image: core
+    build: .
+    env_file:
+      - .env
+    ports:
+      - 4040:4040
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:10
+    env_file:
+      - .env
+    ports:
+      - 5000:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  meili:
+    image: getmeili/meilisearch:v0.27.2
+    volumes:
+      - meili_data:$PWD/data.ms
+    env_file:
+      - .env
+    ports:
+      - 7000:7700
+    restart: always
+
+volumes:
+  postgres_data:
+  meili_data:
+
+networks:
+  default:
+    external:
+      name: iodash-net

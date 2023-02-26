@@ -1,0 +1,192 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  name          String
+  activeBefore  DateTime @default(now())
+  balance       Float    @default(0)
+  password      String
+  todayDownloads Int      @default(0)
+
+  avatarId           Int?
+  contactId          Int
+  roleId             Int
+  subscriptionTypeId Int?
+
+  avatar           File?             @relation(fields: [avatarId], references: [id])
+  contact          Contact           @relation(fields: [contactId], references: [id])
+  role             Role              @relation(fields: [roleId], references: [id])
+  subscriptionType SubscriptionType? @relation(fields: [subscriptionTypeId], references: [id])
+
+  favourites Lesson[]  @relation("FavouritedUsersToLessons")
+  views      Lesson[]  @relation("ViewedUsersToLessons")
+  downloads  Lesson[]  @relation("DownloadedUsersToLessons")
+  payments   Payment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model SubscriptionType {
+  id              Int     @id @default(autoincrement())
+  title           String
+  description     String?
+  months          Int
+  price           Float
+  downloadsPerDay Int     @default(0)
+
+  ///HideField()
+  users User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Contact {
+  id    Int    @id @default(autoincrement())
+  email String @unique
+
+  ///HideField()
+  users User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([email], type: Hash)
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  title     String   @unique
+  ///HideField()
+  users     User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model PaymentType {
+  id    Int    @id @default(autoincrement())
+  title String @unique
+
+  ///HideField()
+  payments Payment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model PaymentStatusType {
+  id    Int    @id @default(autoincrement())
+  title String @unique
+
+  ///HideField()
+  payments Payment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+}
+
+model Tag {
+  id    Int    @id @default(autoincrement())
+  title String
+
+  icon      File?    @relation(fields: [iconId], references: [id])
+  iconId    Int?
+  ///HideField()
+  lessons   Lesson[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Category {
+  id       Int     @id @default(autoincrement())
+  title    String
+  position Int     @default(1)
+  show     Boolean @default(true)
+
+  ///HideField()
+  lessons Lesson[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Lesson {
+  id          Int     @id @default(autoincrement())
+  price       Int
+  title       String
+  description String?
+
+  posterId Int?
+  fileId   Int?
+
+  poster File? @relation(fields: [posterId], references: [id], "PosterToLesson")
+  file   File? @relation(fields: [fileId], references: [id], "FileToLesson")
+
+  categories Category[]
+  tags       Tag[]
+
+  favourites User[] @relation("FavouritedUsersToLessons")
+  views      User[] @relation("ViewedUsersToLessons")
+  downloads  User[] @relation("DownloadedUsersToLessons")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+}
+
+model Payment {
+  id                   Int               @id @default(autoincrement())
+  type                 PaymentType       @relation(fields: [typeId], references: [id])
+  typeId               Int
+  status               PaymentStatusType @relation(fields: [statusId], references: [id])
+  statusId             Int
+  user                 User              @relation(fields: [userId], references: [id])
+  userId               Int
+  summa                Float
+  click_trans_id       String?           @unique
+  click_paydoc_id      String?
+  merchant_trans_id    String?           @unique
+  merchant_prepare_id  String?
+  merchant_confirm_id  String?
+  payme_transaction_id String?           @unique
+  cancel_reason        String?
+  phone_number         String?
+  createdAt            DateTime          @default(now())
+  perfermAt            DateTime?
+  updatedAt            DateTime          @default(now()) @updatedAt
+}
+
+model File {
+  id           Int    @id @default(autoincrement())
+  name         String @unique
+  originalName String
+  size         Int
+  mimeType     String
+  url          String
+  path         String
+
+  ///HideField()
+  tags          Tag[]
+  ///HideField()
+  users         User[]
+  ///HideField()
+  lessonsPoster Lesson[] @relation("PosterToLesson")
+  ///HideField()
+  lessonsVideo  Lesson[] @relation("FileToLesson")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
+
+  @@index([name], type: Hash)
+}
