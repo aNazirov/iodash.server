@@ -205,9 +205,11 @@ export class UserService {
       });
 
       if (!user) return Utils.ErrorHandler(404, null, `User not found`);
-
+      console.log(user);
       return user;
     } catch (e) {
+      console.log(e);
+
       return Utils.ErrorHandler(500, e);
     }
   }

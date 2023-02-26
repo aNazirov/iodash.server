@@ -44,6 +44,7 @@ export class UserController {
   @Roles(Enums.RoleType.Admin, Enums.RoleType.User)
   @UseGuards(RolesGuard)
   findByToken(@JWTPayloadData() payload: JWTPayload) {
+    console.log(payload);
     return this.userService.findByToken(payload.userId);
   }
 
