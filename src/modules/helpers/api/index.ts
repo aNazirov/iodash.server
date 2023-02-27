@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const api = axios.create({
   headers: {
-    origin: 'https://api.sunnyart.uz',
+    origin: 'http://api.iodash.anazirov.com',
   },
 });
 

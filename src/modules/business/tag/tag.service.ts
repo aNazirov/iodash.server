@@ -1,8 +1,10 @@
 import { MeiliService } from '@libs/meili';
 import { PrismaService } from '@libs/prisma';
 import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Prisma } from '@prisma/client';
 import { Utils } from 'src/modules/helpers';
+import api from 'src/modules/helpers/api';
 import { CreateTagDto, FilterTagParams, UpdateTagDto } from './dto/tag.dto';
 
 export const getOne = {
@@ -36,6 +38,7 @@ export class TagService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly meili: MeiliService,
+    private readonly config: ConfigService,
   ) {}
 
   async create(params: CreateTagDto) {
@@ -175,6 +178,14 @@ export class TagService {
       }
 
       await this.meili.tagsIndex.deleteDocument(tag.id);
+
+      if (tag.iconId) {
+        await api
+          .post(`${this.config.get('fileServer')}/file/delete-many`, {
+            ids: [tag.iconId],
+          })
+          .catch((e) => this.logger.error(e));
+      }
 
       return { status: 200, message: 'Tag deleted' };
     } catch (e) {
