@@ -13,8 +13,7 @@ async function bootstrap() {
 
   const whitelist = [
     'http://159.223.157.138:3000',
-    'http://159.223.157.138:3030',
-    'http://159.223.157.138:8000',
+    'http://iodash.anazirov.com',
   ];
 
   if (MODE === 'DEV') {
