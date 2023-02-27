@@ -24,7 +24,7 @@ export const getOne = {
       title: true,
     },
   },
-  tags: {
+  technologies: {
     select: {
       id: true,
       title: true,
@@ -35,6 +35,12 @@ export const getOne = {
           url: true,
         },
       },
+    },
+  },
+  tags: {
+    select: {
+      id: true,
+      title: true,
     },
   },
   poster: {
@@ -70,7 +76,7 @@ export const getMany = {
       title: true,
     },
   },
-  tags: {
+  technologies: {
     select: {
       id: true,
       title: true,
@@ -81,6 +87,12 @@ export const getMany = {
           url: true,
         },
       },
+    },
+  },
+  tags: {
+    select: {
+      id: true,
+      title: true,
     },
   },
   file: {
@@ -128,6 +140,13 @@ export class LessonService {
                 tags: { connect: params.tags.map((id) => ({ id })) },
               }
             : {}),
+          ...(params.technologies?.length
+            ? {
+                technologies: {
+                  connect: params.technologies.map((id) => ({ id })),
+                },
+              }
+            : {}),
         },
         select: getOne,
       });
@@ -137,8 +156,9 @@ export class LessonService {
           id: lesson.id,
           title: lesson.title,
           poster: lesson.poster?.url,
-          categories: lesson.categories.map((x) => x.id),
-          tags: lesson.tags.map((x) => x.id),
+          categories: lesson.categories.map((x) => x.title),
+          tags: lesson.tags.map((x) => x.title),
+          technologies: lesson.technologies.map((x) => x.title),
         },
       ]);
 
@@ -237,6 +257,10 @@ export class LessonService {
 
     if (params.tagId) {
       where.tags = { some: { id: params.tagId } };
+    }
+
+    if (params.technologyId) {
+      where.technologies = { some: { id: params.technologyId } };
     }
 
     if (params.isNew) {
@@ -469,6 +493,13 @@ export class LessonService {
       };
     }
 
+    if (params.technologies?.length) {
+      data.technologies = {
+        set: [],
+        connect: params.technologies.map((id) => ({ id })),
+      };
+    }
+
     try {
       const lesson = await this.prisma.lesson.update({
         where: { id: candidate.id },
@@ -482,8 +513,9 @@ export class LessonService {
             id: lesson.id,
             title: lesson.title,
             poster: lesson.poster?.url,
-            categories: lesson.categories.map((x) => x.id),
-            tags: lesson.tags.map((x) => x.id),
+            categories: lesson.categories.map((x) => x.title),
+            tags: lesson.tags.map((x) => x.title),
+            technologies: lesson.technologies.map((x) => x.title),
           },
         ]);
 

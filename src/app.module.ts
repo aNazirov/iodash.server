@@ -12,6 +12,7 @@ import { LessonModule } from './modules/business/lesson/lesson.module';
 import { PaymentModule } from './modules/business/payment/payment.module';
 import { SubscriptionTypeModule } from './modules/business/subscription-type/subscription-type.module';
 import { TagModule } from './modules/business/tag/tag.module';
+import { TechnologyModule } from './modules/business/technology/technology.module';
 import { UserModule } from './modules/business/user/user.module';
 
 @Module({
@@ -29,6 +30,7 @@ import { UserModule } from './modules/business/user/user.module';
     GlobalModule,
     UserModule,
     LessonModule,
+    TechnologyModule,
     // CacheModule.register({
     //   isGlobal: true,
     //   store: RedisStore,

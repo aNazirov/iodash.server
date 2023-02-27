@@ -98,7 +98,7 @@ model PaymentStatusType {
 
 }
 
-model Tag {
+model Technology {
   id    Int    @id @default(autoincrement())
   title String
 
@@ -123,6 +123,19 @@ model Category {
   updatedAt DateTime @default(now()) @updatedAt
 }
 
+model Tag {
+  id       Int     @id @default(autoincrement())
+  title    String
+  position Int     @default(1)
+  show     Boolean @default(true)
+
+  ///HideField()
+  lessons Lesson[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
 model Lesson {
   id          Int     @id @default(autoincrement())
   price       Int
@@ -135,8 +148,9 @@ model Lesson {
   poster File? @relation(fields: [posterId], references: [id], "PosterToLesson")
   file   File? @relation(fields: [fileId], references: [id], "FileToLesson")
 
-  categories Category[]
-  tags       Tag[]
+  categories   Category[]
+  tags         Tag[]
+  technologies Technology[]
 
   favourites User[] @relation("FavouritedUsersToLessons")
   views      User[] @relation("ViewedUsersToLessons")
@@ -179,15 +193,15 @@ model File {
   path         String
 
   ///HideField()
-  tags          Tag[]
+  technologies  Technology[]
   ///HideField()
   users         User[]
   ///HideField()
-  lessonsPoster Lesson[] @relation("PosterToLesson")
+  lessonsPoster Lesson[]     @relation("PosterToLesson")
   ///HideField()
-  lessonsVideo  Lesson[] @relation("FileToLesson")
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @default(now()) @updatedAt
+  lessonsVideo  Lesson[]     @relation("FileToLesson")
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now()) @updatedAt
 
   @@index([name], type: Hash)
 }

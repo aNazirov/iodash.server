@@ -1,12 +1,9 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class CreateTagDto {
   @IsString()
   title: string;
-
-  @IsNumber()
-  iconId: number;
 }
 
 export class UpdateTagDto extends PartialType(CreateTagDto) {}

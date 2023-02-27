@@ -4,31 +4,16 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Prisma } from '@prisma/client';
 import { Utils } from 'src/modules/helpers';
-import api from 'src/modules/helpers/api';
 import { CreateTagDto, FilterTagParams, UpdateTagDto } from './dto/tag.dto';
 
 export const getOne = {
   id: true,
   title: true,
-  icon: {
-    select: {
-      id: true,
-      name: true,
-      url: true,
-    },
-  },
 };
 
 export const getAll = {
   id: true,
   title: true,
-  icon: {
-    select: {
-      id: true,
-      name: true,
-      url: true,
-    },
-  },
 };
 
 @Injectable()
@@ -43,7 +28,7 @@ export class TagService {
 
   async create(params: CreateTagDto) {
     if (!params.title.trim()) {
-      return Utils.ErrorHandler(400, null, 'Название не должен быть пустым');
+      return Utils.ErrorHandler(400, null, 'Title should not be empty');
     }
 
     try {
@@ -145,10 +130,6 @@ export class TagService {
       data.title = params.title.trim();
     }
 
-    if (params.iconId && candidate.iconId !== params.iconId) {
-      data.icon = { connect: { id: params.iconId } };
-    }
-
     try {
       const tag = await this.prisma.tag.update({
         where: { id: candidate.id },
@@ -182,14 +163,6 @@ export class TagService {
       }
 
       await this.meili.tagsIndex.deleteDocument(tag.id);
-
-      if (tag.iconId) {
-        await api
-          .post(`${this.config.get('fileServer')}/file/delete-many`, {
-            ids: [tag.iconId],
-          })
-          .catch((e) => this.logger.error(e));
-      }
 
       return { status: 200, message: 'Tag deleted' };
     } catch (e) {

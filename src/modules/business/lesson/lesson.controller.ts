@@ -51,8 +51,6 @@ export class LessonController {
   @Roles(Enums.RoleType.Admin, Enums.RoleType.User)
   @UseGuards(JwtAuthGuard, RolesGuard)
   download(@Param('id') id: string, @JWTPayloadData() payload: JWTPayload) {
-    console.log(id);
-
     return this.lessonService.download(+id, payload);
   }
 

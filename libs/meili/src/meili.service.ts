@@ -12,6 +12,11 @@ interface TagQueryModel {
   title: string;
 }
 
+interface TechnologyQueryModel {
+  id: number;
+  title: string;
+}
+
 interface UserQueryModel {
   id: number;
   name: string;
@@ -22,8 +27,9 @@ interface LessonQueryModel {
   id: number;
   title: string;
   poster: string;
-  categories: number[];
-  tags: number[];
+  categories: string[];
+  tags: string[];
+  technologies: string[];
 }
 
 @Injectable()
@@ -36,6 +42,7 @@ export class MeiliService implements OnModuleInit {
   tagsIndex: Index<TagQueryModel>;
   lessonsIndex: Index<LessonQueryModel>;
   usersIndex: Index<UserQueryModel>;
+  technologiesIndex: Index<TechnologyQueryModel>;
 
   async onModuleInit() {
     this.client = new MeiliSearch({
@@ -47,6 +54,7 @@ export class MeiliService implements OnModuleInit {
     this.tagsIndex = this.client.index('tags');
     this.lessonsIndex = this.client.index('lessons');
     this.usersIndex = this.client.index('users');
+    this.technologiesIndex = this.client.index('technologies');
 
     this.logger.log('Meilisearch connected', this.client.config.host);
   }

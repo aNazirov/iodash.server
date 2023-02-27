@@ -21,6 +21,10 @@ export class CreateLessonDto {
   tags?: number[];
 
   @IsOptional()
+  @IsNumber({}, { each: true })
+  technologies?: number[];
+
+  @IsOptional()
   @IsNumber()
   posterId?: number;
 
@@ -42,6 +46,10 @@ export class FilterFullLessonParams {
   @IsOptional()
   @IsNumber()
   tagId?: number;
+
+  @IsOptional()
+  @IsNumber()
+  technologyId?: number;
 
   @IsOptional()
   @IsBoolean()
