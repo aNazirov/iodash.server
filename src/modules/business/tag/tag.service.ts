@@ -145,6 +145,10 @@ export class TagService {
       data.title = params.title.trim();
     }
 
+    if (params.iconId && candidate.iconId !== params.iconId) {
+      data.icon = { connect: { id: params.iconId } };
+    }
+
     try {
       const tag = await this.prisma.tag.update({
         where: { id: candidate.id },
