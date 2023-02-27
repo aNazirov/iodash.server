@@ -12,7 +12,9 @@ async function bootstrap() {
   const MODE = configService.get<string>('mode');
 
   const whitelist = [
-    'http://159.223.157.138:3000',
+    'http://admin.iodash.anazirov.com',
+    'http://www.admin.iodash.anazirov.com',
+    'http://www.iodash.anazirov.com',
     'http://iodash.anazirov.com',
   ];
 
