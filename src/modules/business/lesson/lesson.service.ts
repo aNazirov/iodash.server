@@ -227,6 +227,10 @@ export class LessonService {
       where.favourites = { some: { id: payload.userId } };
     }
 
+    if (params.isDownloads) {
+      where.downloads = { some: { id: payload.userId } };
+    }
+
     if (params.categoryId) {
       where.categories = { some: { id: params.categoryId } };
     }

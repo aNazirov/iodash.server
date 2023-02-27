@@ -49,6 +49,10 @@ export class FilterFullLessonParams {
 
   @IsOptional()
   @IsBoolean()
+  isDownloads?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
   isNew?: boolean;
 
   @IsOptional()
