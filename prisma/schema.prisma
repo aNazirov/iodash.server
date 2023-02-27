@@ -11,11 +11,11 @@ generator client {
 }
 
 model User {
-  id            Int      @id @default(autoincrement())
-  name          String
-  activeBefore  DateTime @default(now())
-  balance       Float    @default(0)
-  password      String
+  id             Int      @id @default(autoincrement())
+  name           String
+  activeBefore   DateTime @default(now())
+  balance        Float    @default(0)
+  password       String
   todayDownloads Int      @default(0)
 
   avatarId           Int?
@@ -41,6 +41,7 @@ model SubscriptionType {
   id              Int     @id @default(autoincrement())
   title           String
   description     String?
+  points          String?
   months          Int
   price           Float
   downloadsPerDay Int     @default(0)

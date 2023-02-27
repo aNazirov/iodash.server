@@ -9,6 +9,10 @@ export class CreateSubscriptionTypeDto {
   @IsString()
   description?: string;
 
+  @IsOptional()
+  @IsString()
+  points?: string;
+
   @IsNumber()
   @Min(0)
   price: number;

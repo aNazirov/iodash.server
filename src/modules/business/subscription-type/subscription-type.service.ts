@@ -43,14 +43,19 @@ export class SubscriptionTypeService {
       const subscriptionType = await this.prisma.subscriptionType.create({
         data: {
           title: params.title,
+          price: params.price,
+          months: params.months,
+          downloadsPerDay: params.downloadsPerDay,
           ...(params.description
             ? {
                 description: params.description,
               }
             : {}),
-          price: params.price,
-          months: params.months,
-          downloadsPerDay: params.downloadsPerDay,
+          ...(params.points
+            ? {
+                points: params.points,
+              }
+            : {}),
         },
         select: getOne,
       });
@@ -174,6 +179,10 @@ export class SubscriptionTypeService {
       candidate.description !== params.description.trim()
     ) {
       data.description = params.description.trim();
+    }
+
+    if (params.points?.trim() && candidate.points !== params.points.trim()) {
+      data.points = params.points.trim();
     }
 
     if (params.price && candidate.price !== params.price) {
